@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Effect Example</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .parallax {
+            height: 100vh;
+            background-attachment: fixed; /* Fixes the background image */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .content {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: #fff;
+            padding: 50px;
+        }
+
+        .content h1 {
+            font-size: 3em;
+        }
+
+        .content p {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax" style="background-image: url('Images/Screenshot\ 2024-07-15\ 194716.png');"></div>
+    <div class="content">
+        <h1>Welcome to My Site</h1>
+        <p>This is a simple parallax effect example.</p>
+        <p>Scroll down to see the effect in action.</p>
+    </div>
+    <div class="parallax" style="background-image: url('Images/Screenshot\ 2024-07-15\ 194716.png');"></div>
+
+    <div class="content">
+        <h1>Another Section</h1>
+        <p>More content here...</p>
+    </div>
+</body>
+</html>

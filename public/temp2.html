@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fade-up on Scroll</title>
+    <style>
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="content fade-up">Section 1</div>
+    <div class="content fade-up">Section 2</div>
+    <div class="content fade-up">Section 3</div>
+    <div class="content fade-up">Section 4</div>
+
+    <script>
+        $(document).ready(function() {
+            function checkVisibility() {
+                $('.fade-up').each(function() {
+                    var elementTop = $(this).offset().top;
+                    var elementBottom = elementTop + $(this).outerHeight();
+                    var viewportTop = $(window).scrollTop();
+                    var viewportBottom = viewportTop + $(window).height();
+
+                    if (elementBottom > viewportTop && elementTop < viewportBottom) {
+                        $(this).addClass('visible');
+                    } else {
+                        $(this).removeClass('visible');
+                    }
+                });
+            }
+
+            $(window).on('scroll resize', checkVisibility);
+            checkVisibility(); // Initial check on page load
+        });
+    </script>
+</body>
+</html>

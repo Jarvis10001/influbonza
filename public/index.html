@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+  <title>Document</title>
+  <link rel="stylesheet" href="style/index3.css">
+  <script>
+    $(document).ready(function () {
+      $(window).on('scroll', function () {
+        $('.fade-up').each(function () {
+          var elementTop = $(this).offset().top;
+          var scrollTop = $(window).scrollTop();
+          var windowHeight = $(window).height();
+
+          if (scrollTop + windowHeight > elementTop + 100) { // Adjust threshold as needed
+            $(this).addClass('visible');
+          } else {
+            $(this).removeClass('visible');
+          }
+        });
+      }).trigger('scroll'); // Trigger scroll event to apply the effect on page load
+      $(window).on('scroll', function () {
+        if ($(this).scrollTop() > 50) {
+          $('nav').addClass('navbar-scrolled');
+          $('nav').css('margin-top', '0px');
+
+
+        } else {
+          $('nav').removeClass('navbar-scrolled');
+          $('nav').css('margin-top', '20px');
+        }
+      });
+      $("#spnemail").html("");
+    $("#spnpwd").html("");
+    $("#spnsignup").html("");
+    $("#spnlogin").html("");
+    $("#txtemail").blur(function(){
+        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+        let email=$(this).val();
+        if(pattern.test(email)==true){
+            $("#spnemail").html("");
+            $("#txtemail").removeClass("is-invalid")  
+            // $("#validemail").addClass("was-validated");
+        }
+        else{
+            $("#txtemail").addClass("is-invalid")
+            // $("#spnemail").html("Enter Valid Email Address!! ");
+        }
+    });
+    $("#txtpwd").blur(function(){
+        var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+        let pwd=$(this).val();
+        if(regularExpression.test(pwd)==true){
+            $("#spnpwd").html("");
+            $("#txtpwd").removeClass("is-invalid")
+        }
+        else{
+            // $("#spnpwd").html("Pass weak");
+            $("#txtpwd").addClass("is-invalid");
+        }
+    })
+    $("#btnsignup").click(function(){
+        let obj={
+            type:'post',
+            url:'/signup-process',
+            data:{
+                txtemail:$("#txtemail").val(),
+                txtpwd:$("#txtpwd").val(),
+                txtfname:$("#txtfname").val(),
+                txtlname:$("#lname").val(),
+                utype:$("#utype").val()
+            }
+        }
+        $.ajax(obj).done(function(resp){
+            $("#spnsignup").html(resp);
+        }).fail(function(err){
+            alert(err.statusText);
+        })
+    })
+    // $("#btnlogin").click(function(){
+    //     // alert();
+    //     let obj={
+    //         type:'post',
+    //         url:'/login-process',
+    //         data:{
+    //             txtemaillgn:$("#txtemaillgn").val(),
+    //             txtpwdlgn:$("#txtpwdlgn").val()
+    //         }
+    //     }
+    //     $.ajax(obj).done(function(jsonary){
+    //         // alert();
+    //         if(jsonary.length==0){
+    //             $("#spnlogin").html("Invalid Email/Password");
+    //             return;
+    //         }
+    //         let utype=jsonary[0].utype;
+    //         if(jsonary[0].status==1){
+    //             // alert("1");
+    //             // alert()
+    //             $("#spnlogin").html(`Logged in as ${utype}`);
+    //             if(utype=="Influencer"){
+    //                 location.href="infl-dash.html"
+    //                 localStorage.setItem("activeuser",$("#txtemaillgn").val());
+    //             }
+    //             else{
+    //                 location.href="user-dash.html";
+    //                 localStorage.setItem("activeuser",$("#txtemaillgn").val());
+    //             }
+
+    //         }   
+
+    //         }).fail(function(err){
+    //         alert(err.statusText);
+    //     });
+    // })
+    $("#btnlogin").click(function(){
+        // alert();
+        let obj={
+            type:'post',
+            url:'/login-process',
+            data:{
+                txtemaillgn:$("#txtemaillgn").val(),
+                txtpwdlgn:$("#txtpwdlgn").val()
+            }
+        }
+        $.ajax(obj).done(function(jsonary){
+            // alert();
+            if(jsonary.length==0){
+                $("#spnlogin").html("Invalid Email/Password");
+                return;
+            }
+            let utype=jsonary[0].utype;
+            if(jsonary[0].status==1){
+                // alert("1");
+                // alert()
+                $("#spnlogin").html(`Logged in as ${utype}`);
+                if(utype=="Influencer"){
+                    location.href="infl-dash.html"
+                    localStorage.setItem("activeuser",$("#txtemaillgn").val());
+                }
+                else if(utype=="admin"){
+                    location.href="admin-dash.html";
+                    localStorage.setItem("activeuser",$("#txtemaillgn").val());
+                }
+                else if(utype=="Recruiter"){
+                    location.href="user-dash.html";
+                    localStorage.setItem("activeuser",$("#txtemaillgn").val());
+                }
+                
+
+            }   
+
+            }).fail(function(err){
+            alert(err.statusText);
+        });
+    })
+    $("#btneye1").click(function(){
+        if($("#txtpwdlgn").prop("type")=="password"){
+            $("#txtpwdlgn").prop("type","text");
+            $("#eye").addClass("fa-eye").removeClass("fa-eye-slash");
+
+        }
+        else if($($("#txtpwdlgn").prop("type")=="text")){
+            $("#txtpwdlgn").prop("type","password");
+            $("#eye").addClass("fa-eye-slash").removeClass("fa-eye");
+        }
+    })
+    $("#btneye").click(function(){
+        if($("#txtpwd").prop("type")=="password"){
+            $("#txtpwd").prop("type","text");
+            $("#eye1").addClass("fa-eye").removeClass("fa-eye-slash");
+
+        }
+        else if($($("#txtpwd").prop("type")=="text")){
+            $("#txtpwd").prop("type","password");
+            $("#eye1").addClass("fa-eye-slash").removeClass("fa-eye");
+        }
+    })
+    // ====================================================
+    // ====================================================
+    // ====================================================
+    $("#aj").click(function(){
+        let obj={
+            type:"post",
+            url:"/mail-otp",
+            data:{
+                txtemail:$("#otpemail").val(),
+            }
+        }
+        $.ajax(obj).done(function(resp){
+            $("#otpspn").html(resp);
+        }).fail(function(err){
+            alert(err.statusText);
+        })
+    })
+    $("#chkotp").click(function(){
+        let obj={
+            type:'post',
+            url:'/check-otp',
+            data:{
+                otpp:$("#txtotp").val(),
+                txtemail: $("#otpemail").val()
+            }
+        }
+        $.ajax(obj).done(function(resp){
+            alert(resp);
+            if(resp==="true"){
+                
+                $("#newpwd").prop("type","text");
+                $("#dis").css("display", "block");
+                alert("true");
+            }
+            else{
+                $("#incotp").html("Incorrect Otp");
+                // alert("falseeeeeeeeeeeeeeee");
+            }
+        }).fail(function(err){
+            alert(err.statusText);
+        })
+    })
+    $("#mailmsg").click(function(){
+      let obj={
+        type:'post',
+        url:'/mail-msg',
+        data:{
+          fname:$("#fname").val(),
+          lname:$("#lname").val(),
+          phone:$("#phone").val(),
+          company:$("#company").val(),
+          insta:$("#insta").val(),
+          face:$("#face").val(),
+          msg:$("#msg").val()
+        }
+      }
+      $.ajax(obj).done(function(resp){
+        $("#msgspn").html("Message Sent!!");
+      }).fail(function(err){
+        alert(err.statusText);
+      })
+    })
+
+    });
+  </script>
+</head>
+
+<body>
+
+
+  <div class="sticky-top">
+    <nav class="navbar navbar-expand-lg  " style="position: absolute; margin-top: 20px;">
+      <!-- background-color: rgba(255, 255, 255, 0); -->
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">C2C</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item mx-3">
+              <a class="nav-link" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item  mx-3">
+              <a class="nav-link" data-bs-toggle="modal" data-bs-target="#signup" href="#">SignUp</a>
+            </li>
+            <li class="nav-item mx-3 ">
+              <a class="nav-link" data-bs-toggle="modal" data-bs-target="#login" href="#">Login</a>
+            </li>
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="#serv">Our Services</a>
+            </li>
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="#reach">Reach Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div>
+    <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="Images/Home-page-banner-2.webp" class="d-block w-100 img-fluid" alt="...">
+          <!-- Added img-fluid class -->
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="container  fade-up    m-3">
+      <div class="row ">
+        <div class="scaleon col-md-3 useflex offset-md-2"
+          style=" height: 27rem; background-image: url(Images/Screenshot\ 2024-07-15\ 173450.png); background-repeat: no-repeat;">
+
+        </div>
+        <div class="col-md-6 scaleon  offset-md-1  " style=" border-radius: 10px ;-webkit-box-shadow: 2px 12px 41px -8px rgba(148,142,148,1);
+        -moz-box-shadow: 2px 12px 41px -8px rgba(148,142,148,1);
+        box-shadow: 2px 12px 41px -8px rgba(148,142,148,1);">
+          <div class="card   text-center mb-3 useflex" style=" border: none;">
+            <div class="card-body  ">
+
+           
+
+              <!-- <p class="card-text  border " style=" border: none; height: 15rem; font-family: 'Caladea', Arial, sans-serif;"> -->
+                <h2 class="card-title  " style=" font-family: 'Caladea', Arial, sans-serif; height: 5rem; ">About Us</h2>
+                   
+              <center>
+                <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+              </center>
+                We provide a platform
+                where clients can easily hire influencers for their
+                gatherings, promotions,
+                r advertising campaigns. Our goal is to connect you with top-notch influencers who can help
+                make your event or campaign a huge success.</p>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="container fade-up">
+      <div class="row">
+        <div class="row">
+          <h2 class="card-title useflex" id="serv"
+            style=" padding-top: 7rem; font-weight: bold; font-family: 'Caladea', Arial, sans-serif; ">Services</h2>
+          <center>
+            <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+          </center>
+        </div>
+        <div class="col-md-10  offset-md-1">
+          <div class="row">
+            <div class="col-md-4">
+              <div class= " scaleon card useflex" style= "box-shadow: none; border: none;">
+                <img src="Images/qwe.jpeg"
+                  style="border-radius: 50%; height: 12rem; width: 12rem;" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="useflex card-title">Event Influencers</h5>
+                  <p class="card-text">
+                    Some quick example text to build on the card title and make up
+                    the bulk of the card's content.
+                  </p>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 ">
+              <div class="scaleon card useflex" style= " box-shadow: none;  border: none;">
+                <img src="Images/Free Vector _ Mobile marketing isometric style.jpeg"
+
+                  style="border-radius: 50%; height: 12rem; width: 12rem;" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="useflex card-title">Advertisement Campaigns</h5>
+                  <p class="card-text">
+                    Some quick example text to build on the card title and make up
+                    the bulk of the card's content.
+                  </p>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="scaleon card useflex" style="box-shadow: none; border: none;">
+                <img src="Images/Traffic and Buzz Builder-Campaign Booster with BONUS.jpeg"
+
+                  style="border-radius: 50%; height: 12rem; width: 12rem;" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <h5 class="useflex card-title">Social Media Takeovers</h5>
+                  <p class="card-text">
+                    Some quick example text to build on the card title and make up
+                    the bulk of the card's content.
+                  </p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="b-example-divider"></div>
+    <div class="container fade-up">
+      <div class="row">
+        <div class="row useflex">
+          <h2 class="card-title useflex"
+            style=" font-weight: bold; font-family: 'Caladea', Arial, sans-serif ; padding-top: 10rem; ">My Team</h2>
+          <center>
+            <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+          </center>
+        </div>
+        <div class="col-md-10  offset-md-1">
+          <div class="row useflex">
+            <div class="col-md-4 ">
+              <div class="scaleon card useflex" style="box-shadow: none; border: none;">
+                <img src="Images/mentor.jpg"
+                  style="border-radius: 4%; height: 18rem; width: 18rem;" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <center>
+                    <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+                  </center>
+                 
+                  <h5 class="card-title useflex">Mentor: 
+                  Er. Rajesh Bansal <br> Author Of Real Java </h5>
+                 
+
+                  <p class="card-text">
+                   
+                  </p>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 ">
+              <div class="scaleon card useflex" style="box-shadow: none; border: none;">
+                <img src="Images/high-angle-desk-arrangement-with-ssd-laptop.jpg"
+                  style="border-radius: 4%; height: 18rem; width: 18rem;" class="card-img-top" alt="..." />
+                <div class="card-body">
+                  <center>
+                    <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+                  </center>
+                  <h5 class="card-title useflex">Jashandeep Singh</h5>
+
+                  <p class="card-text">
+                   
+                  </p>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="container  fade-up">
+      <h2 class="card-title useflex" id="reach"
+        style=" padding-top: 7rem; font-weight: bold; font-family: 'Caladea', Arial, sans-serif; ">Get in touch with us
+        for
+        our Digital Media Services</h2>
+      <center>
+        <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+      </center>
+
+      <!-- <div class="row useflex ">
+          Get in touch with us for
+          our Digital Media Services
+        </div> -->
+      <div class="row  ">
+        <div class="col-7 ">
+
+          <div class="row m-4  useflex">
+            <div class="col">
+              <input type="text" id="fname" class="contact" placeholder="First name" aria-label="First name">
+            </div>
+            <div class="col">
+              <input type="text" id="lname" class="contact" placeholder="Last name" aria-label="Last name">
+            </div>
+          </div>
+          <div class="row m-4 useflex">
+            <div class="col">
+              <input type="text" id="phone" class="contact" placeholder="Phone" aria-label="First name">
+            </div>
+            <div class="col">
+              <input type="text" class="contact" id="company" placeholder="Email" aria-label="Last name">
+            </div>
+          </div>
+          <div class="row m-4 useflex">
+            <div class="col">
+              <input type="text" class="contact" id="insta" placeholder="Existing Instagram URL" aria-label="First name">
+            </div>
+            <div class="col">
+              <input type="text" class="contact" id="face" placeholder="Existing Facebook URL" aria-label="Last name">
+            </div>
+          </div>
+          <div class="row m-4 useflex">
+            <div class="col">
+              <textarea name="" class="contact"    placeholder="Message"id="msg"></textarea>
+            </div>
+          </div>
+          <div class="row m-4 useflex">
+            <div class="col offset-md-8">
+              <!-- <button type="button" a="" class="btn btn-warning">Send Message</button>
+               a -->
+               <span id="msgspn">*</span>
+               <a href="" id="mailmsg" class="btn btn-warning">Send Message</a>
+            </div>
+           
+          </div>
+
+          <!-- <div class="row m-2">
+          <div class="col">
+            <input type="text" class="contact" placeholder="First name" aria-label="First name">
+          </div>
+          <div class="col">
+            <input type="text" class="contact" placeholder="Last name" aria-label="Last name">
+          </div>
+        </div> -->
+          <!-- <div class="form-floating">
+          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+            style="height: 100px"></textarea>
+          <label for="floatingTextarea2">Comments</label>
+        </div> -->
+        </div>
+        <div class="col-md-4 useflex"
+          style="color: red; background-color: rgb(0, 0, 0); margin-bottom: 3rem; height: 30rem;">
+
+          <div class="col-md useflex  useflex">
+            <div class="card text-center mb-3 useflex" style="color: rgb(255, 255, 255); background-color:rgb(0, 0, 0);"
+              style="border: 1px solid black; height: inherit; width: inherit;">
+              <div class="card-body">
+
+                <h2 class="card-title useflex" style="font-weight: bold; font-family: 'Caladea', Arial, sans-serif; ">6283403132</h2>
+                available from 10:00 - 18:00
+                <center>
+                  <hr style="width: 100px; color: #ff0000; border: 2px #ff0000 solid; border-radius: 10px;">
+                </center>
+
+                <p class="card-text    " style=" font-weight: 800; border-radius: 1px; color: black; background-color: orange; ;font-family: 'Caladea', Arial, sans-serif;">Bathinda | Chandigarh |
+                  Banglore</p>
+
+                  <p style="  font-weight: 800; border-radius: 1px; color: black; background-color: orange; ;font-family: 'Caladea', Arial, sans-serif;">Email: info@socialee.in</p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About Us</h3>
+            <p>We are a company that values customer satisfaction and high-quality products.</p>
+          </div>
+          <!-- <div class="footer-section">
+                  <h3>Contact Us</h3>
+                  <ul>
+                      <li><a href="mailto:info@example.com">info@example.com</a></li>
+                      <li><a href="tel:+123456789">+123 456 789</a></li>
+                      <li><a href="#">123 Main Street, Anytown</a></li>
+                  </ul>
+              </div> -->
+          <div class="footer-section">
+            <h3>Follow Us</h3>
+            <div class="social-media">
+              <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">About</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2024 Your Company. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <!-- =======================================Forgot Password?============================================ -->
+    <div class="modal fade " id="forgot" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Forgot Password</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="otpemail" name="otpemail"
+                        placeholder="name@example.com">
+                    <label for="txtemaillgn">Email address</label>
+                    <!-- txtpwdlgn,eye -->
+                </div>
+                <button type="button" style="margin-bottom: 15px;" id="aj" class="btn btn-primary">Send Otp</button>
+                <span id="otpspn">*</span>
+                <div class="row">
+                    <div class="form-floating col mb-3">
+                        <input type="text" class="form-control was-validated" id="txtotp" name="txtotp"
+                            placeholder="Password">
+                        <label for="floatingPassword" style="margin-left: 10px;">Enter Otp</label>
+                    </div>
+                </div>
+                <button type="button" style="margin-bottom: 15px;" id="chkotp" class="btn btn-primary">Check Otp</button>
+                <span id="incotp">*</span>
+                <div class="row" id="dis" style="display: none;">
+                    <div class="form-floating col-11 mb-3">
+                        <input type="text" class="form-control was-validated" id="newtxtpwd" name="newtxtpwd"
+                            placeholder="Password">
+                        <label for="floatingPassword" style="margin-left: 10px;">Enter New Password</label>
+                        <div id="validemail" class="invalid-feedback">
+                            Password Is Weak!!
+                        </div>
+                    </div>
+                    <!-- <div class="col-1" id="btneye">
+                        <span id="addon-wrapping"><i id="eye1"
+                                style="font-size:21px; margin-top: 17px; " class=" fa-solid fa-eye-slash"
+                                style="color: #000000;"></i></span>
+                    </div> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span id="temp2">*</span>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="temp" name="temp">Login</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- =============================Login===================================> -->
+    <div class="modal fade " id="login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Login</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="txtemaillgn" name="txtemaillgn"
+                            placeholder="name@example.com">
+                        <label for="txtemaillgn">Email address</label>
+                        <!-- txtpwdlgn,eye -->
+                    </div>
+                    <div class="row">
+                        <div class="form-floating col-11 mb-3">
+                            <input type="password" class="form-control was-validated" id="txtpwdlgn" name="txtpwdlgn"
+                                placeholder="Password">
+                            <label for="floatingPassword" style="margin-left: 10px;">Password</label>
+                            <div id="validemail" class="invalid-feedback">
+                                Password Is Weak!!
+                            </div>
+                        </div>
+                        
+
+
+                        <div class="col-1" id="btneye1">
+                            <span id="addon-wrapping"><i id="eye"
+                                    style="font-size:21px; margin-top: 17px; " class=" fa-solid fa-eye-slash"
+                                    style="color: #000000;"></i></span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgot">Forgot Password?</button>
+                </div>
+                <div class="modal-footer">
+                    <span id="spnlogin">*</span>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnlogin" name="btnlogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ================================================================> -->
+    <!-- ==============================Sign-up==================================> -->
+    <div class="modal fade " id="signup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <!-- modal-dialog-scrollable -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Sign Up</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="txtemail" name="txtemail"
+                            placeholder="name@example.com">
+                        <label for="floatingInput">Email address</label>
+                        <div id="validemail" class="invalid-feedback">
+                            Enter Valid Email Address!!
+                        </div>
+                        <!-- is-invalid , invalid-feedback, invalid-tooltip-->
+                        <span id="spnemail">*</span>
+                    </div>
+                    <div class="row">
+                        <div class="form-floating col-11 mb-3">
+                            <input type="password" class="form-control was-validated" id="txtpwd" name="txtpwd"
+                                placeholder="Password">
+                            <label for="floatingPassword" style="margin-left: 10px;">Password</label>
+                            <div id="validemail" class="invalid-feedback">
+                                Password Is Weak!!
+                            </div>
+                        </div>
+
+
+                        <div class="col-1" id="btneye">
+                            <span id="addon-wrapping"><i id="eye1"
+                                    style="font-size:21px; margin-top: 17px; " class=" fa-solid fa-eye-slash"
+                                    style="color: #000000;"></i></span>
+                        </div>
+
+
+
+
+                    </div>
+                    <span id="spnpwd">*</span>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="txtfname" name="txtfname" placeholder="">
+                                <label for="floatingInputGrid">first name</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="txtlname" name="txtlname" placeholder="">
+                                <label for="floatingInputGrid">last name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <!-- <div class="col-md">
+                          <div class="form-floating">
+                            <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com">
+                            <label for="floatingInputGrid">abc</label>
+                          </div>
+                        </div> -->
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <select class="form-select" id="utype" name="utype">
+                                    <option selected>Select...</option>
+                                    <option value="Influencer">Influencer</option>
+                                    <option value="Recruiter">Recruiter</option>
+                                </select>
+                                <label for="floatingSelectGrid">Works with selects</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="row">
+                        <div class="col">
+                            <label for="validationCustom03" class="form-label">City</label>
+                            <input type="text" class="form-control" id="validationCustom03" required>
+                            <div class="invalid-feedback">
+                            Please provide a valid city.
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="validationCustom04" class="form-label">State</label>
+                            <select class="form-select" id="validationCustom04" required>
+                            <option selected disabled value="">Choose...</option>
+                            <option>...</option>
+                            </select>
+                            <div class="invalid-feedback">
+                            Please select a valid state.
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="validationCustom05" class="form-label">Zip</label>
+                            <input type="text" class="form-control" id="validationCustom05" required>
+                            <div class="invalid-feedback">
+                            Please provide a valid zip.
+                            </div>
+                        </div>
+                    </div> -->
+
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <span id="spnsignup">*</span>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btnsignup" name="btnsignup">Sign-Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================> -->
+    <!-- <script src="script/index.js"></script> -->
+</body>
+
+</html>

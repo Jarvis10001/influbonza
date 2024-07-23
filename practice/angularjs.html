@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <title>Document</title>
+    <script>
+        var module=angular.module("mymodule",[]);
+        var controller=module.controller("mycontroller",function($scope){
+            $scope.jas="jashannnn";
+            $scope.dojoin=function(){
+                $scope.full=$scope.fname+" "+$scope.lname;
+
+            }
+            $scope.clear=function(){
+                $scope.fname="";
+                $scope.lname="";
+                $scope.full="";
+            }
+            $scope.months=['jan','feb','march','april',];
+        })
+    </script>
+</head>
+<body ng-app="mymodule" ng-controller="mycontroller">
+    {{jas}}
+    <br>
+    <input type="text" ng-model="jas">
+    F.name: <input type="text" ng-model="fname">
+    L.name: <input type="text" ng-model="lname">
+    <input type="button" value="join" ng-click="dojoin();">
+    <input type="button" value="clear" ng-click="clear();">
+    full name: {{full}}
+    <select name="" id="">
+        <option ng-repeat="str in months" value="{{str}}"> {{str}}</option>
+    </select>
+    <select name="" id="">
+        <option value="" ng-repeat="n in [].constructor(31) track by $index" value="{{$index+1}}">{{$index+1}}</option>
+    </select>
+
+
+
+
+
+
+</body>
+</html>

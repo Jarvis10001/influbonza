@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
+    <style>
+        body {
+            background-color: antiquewhite;
+        }
+    </style>
+    <script>
+        var module = angular.module("mymodule", []);
+        var controller = module.controller("mycontroller", function ($scope, $http) {
+
+            $scope.searchkar = function () {
+                // alert();
+                let name = $scope.name;
+                let city = $scope.city;
+                let field = $scope.selfield;
+                let url = "/search-influ?name=" + name + "&city=" + city + "&field=" + field;
+                $http.get(url).then(function (response) {
+                    // alert(JSON.stringify(response.data));
+                    $scope.ary = response.data;
+
+                }, function (err) {
+                    alert(err)
+                })
+            }
+            $scope.showcity = function () {
+                let field = $scope.selfield;
+                let url = "/get-city?field=" + field;
+                $http.get(url).then(function (response) {
+                    $scope.cityary = response.data;
+                }, function (err) {
+                    alert(err)
+                })
+            }
+            $scope.modalinfo1;
+            $scope.modalinfo = function (index) {
+                $scope.modalinfo1 = $scope.ary[index];
+            }
+        })
+        // ,function(err){
+        //             alert(err)
+        //         })
+    </script>
+</head>
+
+<body ng-app="mymodule" ng-controller="mycontroller">
+    <div class="container">
+        <div class="row m-3">
+            <div class="col">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputPassword6" class="col-form-label">name</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" id="txtname" ng-model="name" name="txtname" class="form-control"
+                            aria-describedby="passwordHelpInline">
+                    </div>
+                    <div class="col-auto">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputPassword6" class="col-form-label">field</label>
+                    </div>
+                    <div class="col-auto">
+                        <!-- <input type="text" id="txtfield" ng-model="field" name="txtfield" class="form-control"
+                            aria-describedby="passwordHelpInline"> -->
+                        <select class="form-select" ng-model="selfield" ng-change="showcity();"
+                            aria-label="Default select example">
+                            <option>Open this select menu</option>
+                            <option value="Twitter">Twitter</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Youtube">Youtube</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputPassword6" class="col-form-label">city</label>
+                    </div>
+                    <div class="col-auto">
+                        <!-- <input type="text" id="city" ng-model="city" name="city" class="form-control"
+                            aria-describedby="passwordHelpInline"> -->
+
+                        <!-- <option value="{{obj}}" ng-repeat="obj in cityary">{{obj}}</option>
+                            </select> -->
+                        <select class="form-select" ng-model="city" aria-label="Default select example">
+                            <option>Open this select menu</option>
+                            <option ng-repeat="obj in cityary" value="{{obj.city}}">{{obj.city}}</option>
+                        </select>
+                    </div>
+                    <!-- <div class="col-auto">
+                    </div> -->
+                </div>
+            </div>
+            <div class="col">
+                <button type="button" ng-click="searchkar();" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+    </div>
+    {{name}}
+    {{field}}
+    {{city}}
+    <div class="container">
+        <div class="row g-2" style="display: flex; align-items: center; justify-content: center;">
+            <div class="col-md-3" ng-repeat="obj in ary">
+                <div class="card" style="width: 18rem; ">
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <img src="uploaded/{{obj.pic}}" style="padding: 0.5rem; border-radius: 50%; width:100px ; height:100px ; "
+                            class="card-img-top" alt="...">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{obj.name}}</h5>
+                        <p class="card-text">
+                            <!-- Fields:{{obj.fields}} <br> -->
+                            <!-- City:{{obj.city}} -->
+                        </p>
+                        <button type="button" class="btn btn-primary" ng-click="modalinfo($index);"
+                            data-bs-toggle="modal" data-bs-target="#login">
+                            more info
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" ng-click="modalinfo($index);" data-bs-toggle="modal"
+        data-bs-target="#login">
+        more info
+    </button>
+    <div class="modal fade " id="login" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- email: {{modalinfo1.email}} -->
+                    <div class="row ">
+                        <div class="col-md-6 ">
+                            <div class="card" style="border: none; width: 18rem; ">
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <img src="uploaded/{{modalinfo1.pic}}"
+                                        style="border-radius: 50%; width:100px ; height:100px ; " class="card-img-top"
+                                        alt="...">
+                                </div>
+                                <div class="card-body">
+                                    <center><h5 class=" card-title">{{modalinfo1.name}}</h5></center>
+                                    <p class="card-text">
+                                        <!-- Fields:{{obj.fields}} <br> -->
+                                        <!-- City:{{obj.city}} -->
+                                    </p>
+                                    <center><button type="button" class=" btn btn-primary" ng-click="modalinfo($index);"
+                                        data-bs-toggle="modal" data-bs-target="#login">
+                                        Contact
+                                    </button></center>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md offset-md-2 " >
+                            <div class="row" style="display: flex; align-items: center; justify-content: center;">
+                                <a href="https://www.youtube.com/user/{{modalinfo1.you}}" style="text-decoration: none; color: inherit;"><div class="col offset-md-1 "><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> Youtube</div></a>
+                            </div>
+                            <hr>
+                            <div class="row " style="display: flex; align-items: center; justify-content: center;">
+                                <a href="https://www.instagram.com/{{modalinfo1.insta}}" style="text-decoration: none; color: inherit;"><div class="col offset-md-1"><i class="fa-brands fa-instagram" style=" color: #ff0000;"></i> Instagram</div></a>
+                            </div>
+                            <hr>
+                            <div class="row" style="display: flex; align-items: center; justify-content: center;">
+                               <a href="https://www.facebook.com/{{modalinfo1.face}}" style="text-decoration: none; color: inherit;"> <div class="col offset-md-1"><i class="fa-brands fa-facebook" style="color: #005eff;"></i> Facebook</div></a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-md">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                    value="{{modalinfo1.name}}">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Dob</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                    value="{{modalinfo1.dob}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-md">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                    value="{{modalinfo1.email}}">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Phone</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                    value="{{modalinfo1.phone}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-md">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">City</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                    value="{{modalinfo1.city}}">
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Gender</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                    value="{{modalinfo1.gender}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10"><br>
+                            <input type="text" readonly class="form-control-plaintext" id="staticEmail"
+                                value="{{modalinfo1.address}}">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="btnlogin" name="btnlogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
