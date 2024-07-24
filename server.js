@@ -31,6 +31,10 @@ let config = {
 //  git add .
 // git commit -m "done"
 //  git push (then real line will come)
+// ==================== for changes===================================
+// git add .
+// git commit -m "changes"
+// git push
 var mysql = mysql2.createConnection(config);
 mysql.connect(function (err) {
     if (err == null) {
