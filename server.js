@@ -10,22 +10,22 @@ app.listen(3132, function () {
 app.use(express.static("public"));
 app.use(express.urlencoded("true"));
 app.use(fileupload());
-let config = {
-    host: "127.0.0.1",
-    user: "root",
-    password: "MySql@2291",
-    database: "project",
-    dateStrings: true
-}
 // let config = {
-//     host: "bvtn6xeldxhhc7sladvj-mysql.s  ervices.clever-cloud.com",
-//     user: "uymgl8s6d5ixt1hs",
-//     password: "uymgl8s6d5ixt1hs",
-//     database: "bvtn6xeldxhhc7sladvj",
-//     dateStrings: true,
-//     keepAliveInitialDelay:10000,
-//     enableKeepAlive:true,
+//     host: "127.0.0.1",
+//     user: "root",
+//     password: "MySql@2291",
+//     database: "project",
+//     dateStrings: true
 // }
+let config = {
+    host: "bvtn6xeldxhhc7sladvj-mysql.s  ervices.clever-cloud.com",
+    user: "uymgl8s6d5ixt1hs",
+    password: "uymgl8s6d5ixt1hs",
+    database: "bvtn6xeldxhhc7sladvj",
+    dateStrings: true,
+    keepAliveInitialDelay:10000,
+    enableKeepAlive:true,
+}
 // git init
 // git remote add origin https://github.com/Jarvis10001/influbonza.git    (your repository link)
 //  git add .
