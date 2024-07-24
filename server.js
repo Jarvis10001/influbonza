@@ -10,22 +10,22 @@ app.listen(3132, function () {
 app.use(express.static("public"));
 app.use(express.urlencoded("true"));
 app.use(fileupload());
-// let config = {
-//     host: "127.0.0.1",
-//     user: "root",
-//     password: "MySql@2291",
-//     database: "project",
-//     dateStrings: true
-// }
 let config = {
-    host: "bvtn6xeldxhhc7sladvj-mysql.services.clever-cloud.com",
-    user: "uymgl8s6d5ixt1hs",
-    password: "uymgl8s6d5ixt1hs",
-    database: "bvtn6xeldxhhc7sladvj",
-    dateStrings: true,
-    keepAliveInitialDelay:10000,
-    enableKeepAlive:true,
+    host: "127.0.0.1",
+    user: "root",
+    password: "MySql@2291",
+    database: "project",
+    dateStrings: true
 }
+// let config = {
+//     host: "bvtn6xeldxhhc7sladvj-mysql.s  ervices.clever-cloud.com",
+//     user: "uymgl8s6d5ixt1hs",
+//     password: "uymgl8s6d5ixt1hs",
+//     database: "bvtn6xeldxhhc7sladvj",
+//     dateStrings: true,
+//     keepAliveInitialDelay:10000,
+//     enableKeepAlive:true,
+// }
 // git init
 // git remote add origin https://github.com/Jarvis10001/influbonza.git    (your repository link)
 //  git add .
@@ -45,7 +45,7 @@ mysql.connect(function (err) {
     }
 });
 let transporter = nodemailer.createTransport({
-    service: 'gmail',
+    // service: 'gmail',
     host: 'smtp.gmail.com',
     auth: {
         user: 'mailer100001@gmail.com',
@@ -637,12 +637,26 @@ app.get("/user-profile",function(req,resp){
 // });
 app.post("/mail-msg", function (req, resp) {
     // let txtemail = req.body.txtemail;
-    
+    let smail=req.body.face;
+    let fname=req.body.fname;
+    let lname=req.body.lname
+    let phone=req.body.phone
+    let company=req.body.company
+    let insta=req.body.insta
+    let face=req.body.face
+    let msg=req.body.msg
     let mailOptions1 = {
-        from: '"influencer dash👻" <req.body.face>',
+        from: `"influencer dash👻" <${company}>`,
         to: "mailer100001@gmail.com",
         subject: "Get In Touch",
-        text: `akefhsoisrgu`
+        text: 
+        `First Name:${fname}
+        Last Name:${lname}
+        Phone:${phone}
+        Facebook:${face}
+        Instagram url:${insta}
+        Message:${msg}
+               `
     }
     transporter.sendMail(mailOptions1, function (err, result) {
         // alert();
@@ -653,6 +667,6 @@ app.post("/mail-msg", function (req, resp) {
         // alert();
         // console.log("abas");
         console.log("Email sent to:", result.response);
-        resp.send("Otp Sent....");
+        resp.send("We'll Contact You Soon!!");
     })
 })
