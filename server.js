@@ -18,7 +18,7 @@ app.use(fileupload());
 //     dateStrings: true
 // }
 let config = {
-    host: "bvtn6xeldxhhc7sladvj-mysql.s  ervices.clever-cloud.com",
+    host: "bvtn6xeldxhhc7sladvj-mysql.services.clever-cloud.com",
     user: "uymgl8s6d5ixt1hs",
     password: "gjFUNdmryoLntmWVwm5Q",
     database: "bvtn6xeldxhhc7sladvj",
