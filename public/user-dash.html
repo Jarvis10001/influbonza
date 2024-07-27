@@ -158,6 +158,15 @@
             /* White text color */
         }
     </style>
+    <script>
+        $(document).ready(function(){
+            $("#lgout").click(function(){
+        localStorage.removeItem("activeuser");
+        location.href="index.html";
+        })
+       
+    });
+    </script>
 </head>
 
 <body>
@@ -204,7 +213,7 @@
                             <a class="nav-link" data-bs-toggle="modal" data-bs-target="#setting" href="#">Setting</a>
                         </li>
                         <li class="nav-item mx-3">
-                            <a class="nav-link" data-bs-toggle="modal" id="lgout" data-bs-target="#setting" href="#">Log Out</a>
+                            <a class="nav-link" data-bs-toggle="modal" id="lgout" data-bs-target="#" href="#">Log Out</a>
                         </li>
                     </ul>
                 </div>
