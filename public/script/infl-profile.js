@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    function convertToLocalDateString(date) {
+        const localDate = new Date(date);
+        const year = localDate.getFullYear();
+        const month = String(localDate.getMonth() + 1).padStart(2, '0');
+        const day = String(localDate.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+      };
 
     $("#txtemail").val(localStorage.getItem("activeuser"));
     $("#searchspn").html("");
@@ -53,9 +61,11 @@ $(document).ready(function () {
                     let ary = $.map(str.split(','), function (word) {
                         return $.trim(word);
                     })
+                    const date = new Date();  // Current date and time
+      const localDateString = convertToLocalDateString(date);
                     $("#txtname").val(jsonary[0].name);
                     $("#txtgender").val(jsonary[0].gender);
-                    $("#dob").val(jsonary[0].dob);
+                    $("#dob").val(localDateString);
                     $("#txtadd").val(jsonary[0].address);
                     $("#txtcity").val(jsonary[0].city);
                     $("#txtno").val(jsonary[0].mobile);
@@ -66,7 +76,7 @@ $(document).ready(function () {
                     $("#txtinfo").val(jsonary[0].info);
                     $("#ppic").val(jsonary[0].pic);
                     $("#txtemail").val(jsonary[0].email);
-                    $("#ppic").prop("src", "uploaded/" + jsonary[0].pic)
+                    $("#ppic").prop("src",jsonary[0].pic)
                     $("#hdn").val(jsonary[0].pic);
                     // $("#searchspn").html("Data Retreived");
                     $("#searchspn").html("Data Retreived");

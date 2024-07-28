@@ -3,6 +3,7 @@ var mysql2 = require("mysql2");
 var nodemailer = require("nodemailer");
 var fileupload = require("express-fileupload");
 var crypto = require("crypto");
+var cloudinary = require('cloudinary').v2;
 let app = express();
 app.listen(3132, function () {
     console.log("server started at 3132 ===>");
@@ -17,16 +18,21 @@ app.use(fileupload());
 //     database: "project",
 //     dateStrings: true
 // }
-let config = {
-    host: "bvtn6xeldxhhc7sladvj-mysql.services.clever-cloud.com",
-    user: "uymgl8s6d5ixt1hs",
-    password: "gjFUNdmryoLntmWVwm5Q",
-    database: "bvtn6xeldxhhc7sladvj",
-    dateStrings: true,
-    keepAliveInitialDelay:10000,
-    enableKeepAlive:true,
-} 
-
+// let config = {
+//     host: "bvtn6xeldxhhc7sladvj-mysql.services.clever-cloud.com",
+//     user: "uymgl8s6d5ixt1hs",
+//     password: "gjFUNdmryoLntmWVwm5Q",
+//     database: "bvtn6xeldxhhc7sladvj",
+//     dateStrings: true,
+//     keepAliveInitialDelay:10000,
+//     enableKeepAlive:true,
+// } 
+cloudinary.config({
+    cloud_name: 'dzg5uy5c6',
+    api_key: '432794121287168',
+    api_secret: 'JdPLqcG7QUUOuL3ximFf99QgaFE' // Click 'View Credentials' below to copy your API secret
+});
+let config = "mysql://avnadmin:AVNS_argdACuzsB8J8esnpXW@mysql-1e4780c7-jashandeepsingh9023-fc1f.g.aivencloud.com:17237/defaultdb"
 // git init
 // git remote add origin https://github.com/Jarvis10001/influbonza.git    (your repository link)
 //  git add .
@@ -115,11 +121,16 @@ app.get("/infl-profile", function (req, resp) {
     let path = __dirname + "/public/infl-profile.html";
     resp.sendFile(path);
 })
-app.post("/submit-process", function (req, resp) {
+app.post("/submit-process", async function (req, resp) {
     let ppic = "";
     if (req.files != null) {
         ppic = req.files.ppicsrc.name;
         let path = __dirname + "/public/uploaded/" + ppic;
+        await cloudinary.uploader.upload(path).then(function (result) {
+            ppic = result.url;
+        }).catch(function (error) {
+            console.error('Error in fetchData:', error);
+        });
         req.files.ppicsrc.mv(path);
     } else {
         ppic = "nopic.jpg";
@@ -161,11 +172,16 @@ app.post("/submit-process", function (req, resp) {
         })
 
 })
-app.post("/submit-process-user", function (req, resp) {
+app.post("/submit-process-user", async function (req, resp) {
     let ppic = "";
     if (req.files != null) {
         ppic = req.files.ppicsrc.name;
         let path = __dirname + "/public/uploaded/" + ppic;
+        await cloudinary.uploader.upload(path).then(function (result) {
+            ppic = result.url;
+        }).catch(function (error) {
+            console.error('Error in fetchData:', error);
+        });
         req.files.ppicsrc.mv(path);
     } else {
         ppic = "nopic.jpg";
@@ -178,7 +194,7 @@ app.post("/submit-process-user", function (req, resp) {
     let txtadd = req.body.txtadd;
     let txtcity = req.body.txtcity;
     let txtno = req.body.txtno;
-    let txtorg=req.body.txtorg;
+    let txtorg = req.body.txtorg;
     // let ary = req.body.fields;
     // let txtinsta = req.body.txtinsta;
     // let txtface = req.body.txtface;
@@ -195,7 +211,7 @@ app.post("/submit-process-user", function (req, resp) {
     // }
 
     mysql.query("insert into uinfo values(?,?,?,?,?,?,?,?,?)", [txtemail, txtname, txtgender, dob,
-        txtadd, txtcity, txtno, ppic,txtorg], function (err, result) {
+        txtadd, txtcity, txtno, ppic, txtorg], function (err, result) {
             if (err != null) {
                 resp.send(err.message);
                 // console.log(err.message);
@@ -209,11 +225,16 @@ app.post("/submit-process-user", function (req, resp) {
         })
 
 })
-app.post("/update-process", function (req, resp) {
+app.post("/update-process", async function (req, resp) {
     let ppic = "";
     if (req.files != null) {
         ppic = req.files.ppicsrc.name;
         let path = __dirname + "/public/uploaded/" + ppic;
+        await cloudinary.uploader.upload(path).then(function (result) {
+            ppic = result.url;
+        }).catch(function (error) {
+            console.error('Error in fetchData:', error);
+        });
         req.files.ppicsrc.mv(path);
     } else {
         ppic = req.body.hdn;
@@ -247,7 +268,7 @@ app.post("/update-process", function (req, resp) {
         if (err == null) {
             if (result.affectedRows >= 1) {
                 // resp.send("record Updated");
-            resp.redirect("result.html");
+                resp.redirect("result.html");
 
             }
             else {
@@ -259,11 +280,16 @@ app.post("/update-process", function (req, resp) {
         }
     })
 })
-app.post("/update-process-user", function (req, resp) {
+app.post("/update-process-user", async function (req, resp) {
     let ppic = "";
     if (req.files != null) {
         ppic = req.files.ppicsrc.name;
         let path = __dirname + "/public/uploaded/" + ppic;
+        await cloudinary.uploader.upload(path).then(function (result) {
+            ppic = result.url;
+        }).catch(function (error) {
+            console.error('Error in fetchData:', error);
+        });
         req.files.ppicsrc.mv(path);
     } else {
         ppic = req.body.hdn;
@@ -276,7 +302,7 @@ app.post("/update-process-user", function (req, resp) {
     let txtadd = req.body.txtadd;
     let txtcity = req.body.txtcity;
     let txtno = req.body.txtno;
-    let txtorg=req.body.txtorg;
+    let txtorg = req.body.txtorg;
 
     // let ary = req.body.fields;
     // let txtinsta = req.body.txtinsta;
@@ -295,11 +321,11 @@ app.post("/update-process-user", function (req, resp) {
     // }
     // console.log(hdn);
 
-    mysql.query("update uinfo set name=?, gender=?, dob=?, address=?, city=?, mobile=?, pic=?,org=? where email=?", [txtname, txtgender, dob, txtadd, txtcity, txtno,ppic,txtorg, txtemail], function (err, result) {
+    mysql.query("update uinfo set name=?, gender=?, dob=?, address=?, city=?, mobile=?, pic=?,org=? where email=?", [txtname, txtgender, dob, txtadd, txtcity, txtno, ppic, txtorg, txtemail], function (err, result) {
         if (err == null) {
             if (result.affectedRows >= 1) {
                 // resp.send("record Updated");
-            resp.redirect("result.html")
+                resp.redirect("result.html")
 
             }
             else {
@@ -588,7 +614,7 @@ app.get("/do-delete-event", function (req, resp) {
 app.post("/check-sub", function (req, resp) {
     let txtemail = req.body.txtemail;
     // console.log(txtemail);
-    mysql.query("select * from info where email=?",[txtemail], function (err, result) {
+    mysql.query("select * from info where email=?", [txtemail], function (err, result) {
         if (err != null) {
             resp.send(err.message);
             return;
@@ -601,33 +627,33 @@ app.post("/check-sub", function (req, resp) {
         // else{
         //     resp.send("1")
         // }
-        if(result.length>=1){
+        if (result.length >= 1) {
             resp.send("1")
         }
-        else{
+        else {
             resp.send("0");
 
         }
     })
 })
-app.post("/check-sub-user",function(req,resp){
-    let txtemail=req.body.txtemail;
-    mysql.query("select * from uinfo where email=?",[txtemail],function(err,result){
-        if(err!=null){
+app.post("/check-sub-user", function (req, resp) {
+    let txtemail = req.body.txtemail;
+    mysql.query("select * from uinfo where email=?", [txtemail], function (err, result) {
+        if (err != null) {
             resp.send(err.message);
             return;
         }
-        if(result.length>=1){
+        if (result.length >= 1) {
             resp.send("1")
         }
-        else{
+        else {
             resp.send("0");
 
         }
     })
 })
-app.get("/user-profile",function(req,resp){
-    let path=__dirname+"/public/user-prof.html";
+app.get("/user-profile", function (req, resp) {
+    let path = __dirname + "/public/user-prof.html";
     resp.sendFile(path);
 })
 // app.get('/logout', (req, res) => {
@@ -638,20 +664,20 @@ app.get("/user-profile",function(req,resp){
 // });
 app.post("/mail-msg", function (req, resp) {
     // let txtemail = req.body.txtemail;
-    let smail=req.body.face;
-    let fname=req.body.fname;
-    let lname=req.body.lname
-    let phone=req.body.phone
-    let company=req.body.company
-    let insta=req.body.insta
-    let face=req.body.face
-    let msg=req.body.msg
+    let smail = req.body.face;
+    let fname = req.body.fname;
+    let lname = req.body.lname
+    let phone = req.body.phone
+    let company = req.body.company
+    let insta = req.body.insta
+    let face = req.body.face
+    let msg = req.body.msg
     let mailOptions1 = {
         from: `"influencer dash👻" <${company}>`,
         to: "mailer100001@gmail.com",
         subject: "Get In Touch",
-        text: 
-        `First Name:${fname}
+        text:
+            `First Name:${fname}
         Last Name:${lname}
         Phone:${phone}
         Facebook:${face}
