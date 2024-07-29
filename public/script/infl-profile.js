@@ -61,7 +61,7 @@ $(document).ready(function () {
                     let ary = $.map(str.split(','), function (word) {
                         return $.trim(word);
                     })
-                    const date = new Date();  // Current date and time
+                    const date = jsonary[0].dob;  // Current date and time
       const localDateString = convertToLocalDateString(date);
                     $("#txtname").val(jsonary[0].name);
                     $("#txtgender").val(jsonary[0].gender);
